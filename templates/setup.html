@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="large-12 columns text-center">
+    <h2>Complete Registration</h2>
+  </div>
+</div>
+<form action="/setup" method="post">
+<div class="row">
+  <div class="large-12 columns text-center">
+    <label for="address"><h3>Address</h3></label>
+    <input type="text" id="address" name="address" required>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns text-center">
+    <h4>Choose a photo</h4>
+    <ul class="large-block-grid-4">
+      {% for photo in photos %}
+        <li>
+          <label>
+            <input type="radio" name="photos" value="{{ photo }}">
+            <img src="{{ photo }}">
+          </label>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns text-center">
+    <button type="submit">Submit</button>
+  </div>
+</div>
+</form>
+{% endblock %}

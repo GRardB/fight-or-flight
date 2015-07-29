@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="large-12 columns text-center">
+    <a href="/matches" class="alert button">Back to matches</a>
+    <a href="/match" class="button">Find more punks</a>
+  </div>
+</div>
+<div class="row">
+  <div class="large-6 columns">
+    <img src="{{ opponent.pic_1 }}">
+    <h3>{{ opponent.name }}</h3>
+    <h4>{{ opponent.address }}</h4>
+  </div>
+  <div class="large-6 columns">
+
+    <form action="/message" method="post" id="message_form">
+      <input type="hidden" value="{{ opponent.id }}" name="opponent_id">
+      <input type="hidden" value="{{ opponent.name }}" name="opponent_name">
+      <textarea name="message" id="message" rows="5"></textarea>
+      <button type="submit">Send</button>
+    </form>
+
+    <div id="messages" style="height: 600px; overflow: auto;"></div>
+  </div>
+</div>
+
+
+<script>
+  (function($) {
+    var $messageForm = $('#message_form');
+    var $message = $('#message');
+    var $messages = $('#messages');
+
+    var message = function(evt) {
+      evt.preventDefault();
+
+      if ($message.val().replace(/\s+/, '').length == 0) return;
+
+      $.post('/message', $messageForm.serialize(), function(data) {
+        console.log($messageForm.serialize());
+        console.log(JSON.parse(data));
+        $message.val('');
+      });
+    };
+
+    var getMessages = function() {
+      $.getJSON('/messages/{{ opponent.id }}', function(messages) {
+        $messages.html('');
+        messages.forEach(function(message) {
+          var $newMsg = $('<div>').html(message.user_1_name + ': ' + message.message);
+          $messages.append($newMsg);
+        });
+
+        setTimeout(getMessages, 1000);
+      });
+    };
+
+    $messageForm.on('submit', message);
+
+    $message.on('keypress', function(e) {
+      if (e.which === 13) {
+        $messageForm.submit();
+        return false;
+      }
+    });
+
+    getMessages();
+  })(jQuery);
+</script>
+{% endblock %}

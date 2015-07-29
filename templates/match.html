@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="large-12 columns text-center">
+    <a href="/matches" class="alert button">Matches</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns text-center" id="matches">
+    <h4 id="name"></h4>
+    <img id="user_img" style="margin-bottom: 5px;">
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns text-center">
+    <button id="flight"><img src="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xap1/t39.1997-6/851555_460938594027989_1248875505_n.png"></button>
+    <button id="fight"><img src="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xpa1/t39.1997-6/851589_460938524027996_480764554_n.png"></button>
+  </div>
+</div>
+
+<script>
+  (function($) {
+
+    var opponent;
+
+    var $userImage = $('#user_img');
+    var $userName = $('#name');
+
+    var getUser = function() {
+      $.getJSON('/get_user', function(user) {
+        console.log(user);
+        if (user === '') {
+          $('#matches').html('Nobody left to fight. Sorry!');
+          $('#flight').attr('disabled', true);
+          $('#fight').attr('disabled', true);
+          return;
+        }
+
+        opponent = user;
+        $userImage.attr('src', user.pic_1);
+        $userName.html(user.name);
+      });
+    };
+
+    var fightUser = function(user) {
+      $.post('/fight', user, function(data) {
+        console.log(data);
+      });
+    };
+
+    var fleeFromUser = function(user) {
+      $.post('/flee', user, function(data) {
+        console.log(data);
+      });
+    };
+
+    $(function() {
+      opponent = getUser();
+
+      $('#fight').on('click', function() {
+        fightUser(opponent);
+        user = getUser();
+      });
+
+      $('#flight').on('click', function() {
+        fleeFromUser(opponent);
+        user = getUser();
+      });
+
+    });
+  })(jQuery);
+</script>
+{% endblock %}

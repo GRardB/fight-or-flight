@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Fight or Flight</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='foundation.min.css') }}">
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-12 columns text-center">
+        <h1>Fight or Flight</h1>
+      </div>
+    </div>
+    {% block body %}{% endblock %}
+  </body>
+</html>
+

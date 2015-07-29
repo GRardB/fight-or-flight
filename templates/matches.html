@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="large-12 columns text-center">
+    <a href="/match" class="button">Find More Punks</a>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns text-center">
+    <ul class="large-block-grid-3">
+      {% for match in matches %}
+      <li>
+        <a href="/matches/{{ match.id }}"><img src="{{ match.pic_1 }}">
+          {{ match.name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
